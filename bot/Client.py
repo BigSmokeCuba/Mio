@@ -213,7 +213,25 @@ class MoodleClient(object):
             except:
                 retQuery[qspl[0]] = None
         return retQuery
+    
+    def sendFile(self,chat_id,file,type='document'):
 
+        sendDocumentUrl = self.path + self.SendFileTypes[type]
+
+        of = codecs.open(file)
+
+        payload_files = {type:(file,of)}
+
+        payload_data = {'chat_id':chat_id}
+
+        result = requests.post(sendDocumentUrl,files=payload_files,data=payload_data).text
+
+        of.close()
+
+        parse = json.loads(result, object_hook = lambda d : Namespace(**d))
+
+        return parse.result
+    
     def getFiles(self):
         urlfiles = self.path+'user/files.php'
         resp = self.session.get(urlfiles)
