@@ -140,12 +140,27 @@ async def process_file(file, bot, ev, msg):
                 f'Subido ✅\n\nArchivo: {str(file)}\nTamaño: {str(sizeof_fmt(file_size))}')
         else:
             await upload_to_moodle(file, msg)
-            os.unlink(file)
+            if len(files)>0:
+            txtname = str(file).split('/')[-1].split('.')[0] + '.txt'
+            sendTxt(txtname,files,update,bot)
 
     except Exception as e:
         await msg.edit('(Error Subida) - ' + str(e))
 
-
+def sendTxt(name,files,update,bot):
+                txt = open(name,'w')
+                fi = 0
+                for f in files:
+                    separator = ''
+                    if fi < len(files)-1:
+                        separator += '\n'
+                    txt.write(f['directurl']+separator)
+                    fi += 1
+                txt.close()
+                bot.sendFile(update.message.chat.id,name)
+                os.unlink(name)
+                
+                
 async def processMy(ev, bot):
     try:
         text = ev.message.text
@@ -205,7 +220,31 @@ def save(filename, size):
     zip.write(filename)
     zip.close()
     mult_file.close()
+    
+    
+def sendTxt(name,files,update,bot):
 
+                txt = open(name,'w')
+
+                fi = 0
+
+                for f in files:
+
+                    separator = ''
+
+                    if fi < len(files)-1:
+
+                        separator += '\n'
+
+                    txt.write(f['directurl']+separator)
+
+                    fi += 1
+
+                txt.close()
+
+                bot.sendFile(update.message.chat.id,name)
+
+                os.unlink(name)
 
 async def upload_to_moodle_url(msg, bot, ev, url):
     await msg.edit('⚙️Analizando...')
