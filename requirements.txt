@@ -2,7 +2,7 @@
 emoji
 ujson
 bs4==0.0.1
-mega.py==1.0.1
+mega.py
 Telethon==1.24.0
 progressbar==2.5
 youtube-dl==2021.6.6
